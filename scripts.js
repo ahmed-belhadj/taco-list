@@ -16,7 +16,11 @@ function handleAddTaco(event) {
 function renderTacoList(items = [], itemList) {
   tacoList.innerHTML = items
     .map((item, i) => {
-      return `<li><label for="">${item.text}</label></li>`;
+      return `<li>
+      <input type="checkbox" data-index=${i} id="taco${i}" ${
+        item.done ? "checked" : ""
+      }/>
+      <label for="taco${i}">${item.text}</label></li>`;
     })
     .join("");
 }
