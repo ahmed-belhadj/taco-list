@@ -1,6 +1,6 @@
 const addTaco = document.querySelector(".add-taco");
 const tacoList = document.querySelector(".tacos");
-const tacos = [];
+const tacos = JSON.parse(localStorage.getItem("tacos")) || [];
 
 function handleAddTaco(event) {
   event.preventDefault();
@@ -11,10 +11,11 @@ function handleAddTaco(event) {
   };
   tacos.push(taco);
   renderTacoList(tacos, tacoList);
+  localStorage.setItem("tacos", JSON.stringify(tacos));
   this.reset();
 }
 function renderTacoList(items = [], itemList) {
-  tacoList.innerHTML = items
+  itemList.innerHTML = items
     .map((item, i) => {
       return `<li>
       <input type="checkbox" data-index=${i} id="taco${i}" ${
@@ -24,4 +25,17 @@ function renderTacoList(items = [], itemList) {
     })
     .join("");
 }
+
+function handleToggleTaco(event) {
+  if (!event.target.matches("input")) {
+    return;
+  }
+  const index = event.target.dataset.index;
+  tacos[index].done = !tacos[index].done;
+  localStorage.setItem("tacos", JSON.stringify(tacos));
+  renderTacoList(tacos, tacoList);
+}
+
 addTaco.addEventListener("submit", handleAddTaco);
+tacoList.addEventListener("click", handleToggleTaco);
+renderTacoList(tacos, tacoList);
